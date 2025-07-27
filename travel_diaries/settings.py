@@ -33,7 +33,7 @@ else:
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'localhost', '127.0.0.1', '[::1]'
+    'localhost', '127.0.0.1', '[::1]', 'django-travel-diary-313641113dc1.herokuapp.com'
 ]
 
 
