@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 import os
 from pathlib import Path
 
-from django.conf.global_settings import LOGGING
+from django.conf.global_settings import LOGGING, CSRF_TRUSTED_ORIGINS
 from dotenv import load_dotenv
 import base64
 import dj_database_url
@@ -63,6 +63,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+CSRF_TRUSTED_ORIGINS = [
+    'https://django-travel-diary-313641113dc1.herokuapp.com',
 ]
 
 ROOT_URLCONF = 'travel_diaries.urls'
@@ -176,4 +179,4 @@ django_on_heroku.settings(locals())
 logfire.configure()
 logfire.instrument_django()
 logfire.instrument_sqlite3()
-logfire.instrument_psycopg()
+logfire.instrument_psycopg() #postgresql instrumentation
