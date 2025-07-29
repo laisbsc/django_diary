@@ -65,7 +65,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 CSRF_TRUSTED_ORIGINS = [
-    'django-travel-diary-313641113dc1.herokuapp.com',
+    'https://django-travel-diary-313641113dc1.herokuapp.com',
 ]
 
 ROOT_URLCONF = 'travel_diaries.urls'
