@@ -9,3 +9,4 @@ dj-database-url==2.1.0
 folium==0.20.0
 logfire==4.0.0
 logfire[django]
+logfire[sqlite3]
