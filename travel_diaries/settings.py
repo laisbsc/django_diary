@@ -11,9 +11,13 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 import os
 from pathlib import Path
+
+from django.conf.global_settings import LOGGING
 from dotenv import load_dotenv
 import base64
 import dj_database_url
+import logfire
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -70,6 +74,7 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+                'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
@@ -141,6 +146,34 @@ STATIC_ROOT = BASE_DIR / 'static'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# Logging configuration
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+            'standard': {
+                'format': '%(asctime)s %(levelname)s %(name)s %(message)s'
+            },
+        },
+    'handlers': {
+        'logfire': {
+            'class': 'logfire.LogfireLoggingHandler',
+            'formatter': 'standard',
+            'source_token': os.environ.get('LOGFIRE_SOURCE_TOKEN'),
+        },
+    },
+    'root': {
+        'handlers': ['logfire'],
+        'level': 'INFO',
+        },
+}
+
 # Configure Django App for Heroku.
 import django_on_heroku
 django_on_heroku.settings(locals())
+
+# Initialize Logfire
+logfire.configure()
+logfire.instrument_django()
+logfire.instrument_sqlite3()
+logfire.instrument_mysql()

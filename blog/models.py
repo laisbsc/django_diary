@@ -2,12 +2,16 @@ from django.db import models
 from django.conf import settings
 from django.utils import timezone
 
+from map.models import Location
+
+
 class Post(models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
     title = models.CharField(max_length=250)
     content = models.TextField()
     created_at = models.DateTimeField(default=timezone.now)
     published_date = models.DateTimeField(blank=True, null=True)
+    location = models.ForeignKey(Location, on_delete=models.PROTECT, related_name='place', blank=True, null=True)
 
     def publish(self):
         self.published_date = timezone.now()
