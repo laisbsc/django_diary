@@ -176,8 +176,27 @@ import django_on_heroku
 django_on_heroku.settings(locals())
 
 # Initialize Logfire
-logfire.configure()
-logfire.instrument_django()
-logfire.instrument_sqlite3()
-logfire.instrument_psycopg() #postgresql instrumentation
-logfire.instrument_system_metrics(base='full')
+# logfire.configure()
+# logfire.instrument_django()
+# logfire.instrument_sqlite3()
+# logfire.instrument_psycopg() #postgresql instrumentation
+# logfire.instrument_system_metrics(base='full')
+
+api_key = os.environ.get("LOGFIRE_API_KEY")
+
+if api_key:
+    logfire.configure(token=api_key)
+
+    # Instrument system metrics (as before)
+    logfire.instrument_system_metrics(base="full")
+
+    # Instrument Django and the ORM
+    logfire.instrument_django()
+
+    # Instrument the psycopg library for PostgreSQL
+    # If you are using psycopg2, the function is instrument_psycopg2()
+    logfire.instrument_psycopg()
+
+    print("Logfire instrumentation enabled for Django, system metrics, and PostgreSQL.")
+else:
+    print("LOGFIRE_API_KEY environment variable not set. Logfire is not enabled.")
