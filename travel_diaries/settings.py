@@ -180,3 +180,4 @@ logfire.configure()
 logfire.instrument_django()
 logfire.instrument_sqlite3()
 logfire.instrument_psycopg() #postgresql instrumentation
+logfire.instrument_system_metrics()
