@@ -153,22 +153,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
-    'formatters': {
-            'standard': {
-                'format': '%(asctime)s %(levelname)s %(name)s %(message)s'
-            },
-        },
     'handlers': {
         'logfire': {
             'class': 'logfire.LogfireLoggingHandler',
-            'formatter': 'standard',
-            'source_token': os.environ.get('LOGFIRE_SOURCE_TOKEN'),
         },
     },
     'root': {
         'handlers': ['logfire'],
-        'level': 'DEBUG',
-        },
+    },
 }
 
 # Configure Django App for Heroku.
