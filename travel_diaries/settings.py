@@ -182,7 +182,7 @@ django_on_heroku.settings(locals())
 # logfire.instrument_psycopg() #postgresql instrumentation
 # logfire.instrument_system_metrics(base='full')
 
-api_key = os.environ.get("LOGFIRE_API_KEY")
+api_key = os.environ.get("LOGFIRE_TOKEN")
 
 if api_key:
     logfire.configure(token=api_key)
