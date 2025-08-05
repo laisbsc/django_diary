@@ -61,6 +61,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'travel_diaries.middleware.PageLoadTimeMiddleware',  # Custom middleware for metric showing page load time
 ]
 CSRF_TRUSTED_ORIGINS = [
     'https://django-travel-diary-313641113dc1.herokuapp.com',
