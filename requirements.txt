@@ -11,5 +11,4 @@ logfire==4.0.0
 logfire[django]
 logfire[sqlite3]
 logfire[system-metrics]
-
-opentelemetry-instrumentation-psycopg
+logfire[psycopg]
