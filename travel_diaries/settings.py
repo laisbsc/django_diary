@@ -175,15 +175,14 @@ if api_key:
     logfire.configure(token=api_key, service_name='django-travel-diary')
 
     # # Instrument system metrics
-    # logfire.instrument_system_metrics({
-    #     'process.cpu.utilization': None,
-    #     'system.cpu.simple_utilization': None,
-    #     'system.memory.utilization': ['available'],
-    #     'system.swap.utilization': ['used'],
-    # })
-
-    # Instrument system metrics
-    logfire.instrument_system_metrics(base='full')
+    logfire.instrument_system_metrics({
+        'process.cpu.utilization': None,
+        'system.cpu.simple_utilization': None,
+        'system.memory.usage': ['available', 'used'],
+        'system.memory.utilization': ['available', 'used'],
+        'system.swap.utilization': ['used'],
+        'system.network.io':['transmit', 'receive'],
+    })
 
     # Instrument Django
     logfire.instrument_django()

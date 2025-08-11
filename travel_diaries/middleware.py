@@ -12,8 +12,8 @@ class PageLoadTimeMiddleware:
         # 'unit' helps Logfire understand the measurement (seconds in this case).
         self.page_load_histogram = logfire.metric_histogram(
             'django_page_load_time',
-            unit='s', #seconds
-            description='Time taken to load a single Django page (server-side).'
+            unit='ms', #miliseconds
+            description='Time taken to load a single Django page (server-side) in ms.'
         )
 
     def __call__(self, request):
