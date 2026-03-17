@@ -1,0 +1,83 @@
+databases:
+  - name: django-diary-db
+    region: frankfurt
+    plan: starter
+
+  - name: django-diary-db-staging
+    region: frankfurt
+    plan: free
+
+services:
+  - type: web
+    name: django-diary
+    env: python
+    region: frankfurt
+    plan: starter
+    branch: main
+    buildCommand: pip install uv && uv sync --frozen && uv run python manage.py collectstatic --no-input && uv run python manage.py migrate
+    startCommand: uv run gunicorn travel_diaries.wsgi:application --bind 0.0.0.0:$PORT --workers 2
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: travel_diaries.settings.production
+      - key: ENVIRONMENT
+        value: prod
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: django-diary-db
+          property: connectionString
+      # Set these manually in the Render dashboard — never commit real values
+      - key: ALLOWED_HOSTS
+        sync: false
+      - key: CSRF_TRUSTED_ORIGINS
+        sync: false
+      - key: LOGFIRE_TOKEN
+        sync: false
+      - key: CLOUDFLARE_R2_BUCKET_NAME
+        sync: false
+      - key: CLOUDFLARE_R2_ACCESS_KEY_ID
+        sync: false
+      - key: CLOUDFLARE_R2_SECRET_ACCESS_KEY
+        sync: false
+      - key: CLOUDFLARE_R2_ENDPOINT_URL
+        sync: false
+      - key: CLOUDFLARE_R2_MEDIA_PREFIX
+        value: prod
+
+  - type: web
+    name: django-diary-staging
+    env: python
+    region: frankfurt
+    plan: starter
+    branch: staging
+    buildCommand: pip install uv && uv sync --frozen && uv run python manage.py collectstatic --no-input && uv run python manage.py migrate
+    startCommand: uv run gunicorn travel_diaries.wsgi:application --bind 0.0.0.0:$PORT --workers 2
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: travel_diaries.settings.production
+      - key: ENVIRONMENT
+        value: staging
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: django-diary-db-staging
+          property: connectionString
+      # Set these manually in the Render dashboard — never commit real values
+      - key: ALLOWED_HOSTS
+        sync: false
+      - key: CSRF_TRUSTED_ORIGINS
+        sync: false
+      - key: LOGFIRE_TOKEN
+        sync: false
+      - key: CLOUDFLARE_R2_BUCKET_NAME
+        sync: false
+      - key: CLOUDFLARE_R2_ACCESS_KEY_ID
+        sync: false
+      - key: CLOUDFLARE_R2_SECRET_ACCESS_KEY
+        sync: false
+      - key: CLOUDFLARE_R2_ENDPOINT_URL
+        sync: false
+      - key: CLOUDFLARE_R2_MEDIA_PREFIX
+        value: staging
