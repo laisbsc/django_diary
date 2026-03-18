@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load blog_filters %}
+
+{% block title %}About — laís.{% endblock %}
+
+{% block meta %}
+<link rel="canonical" href="{{ request.build_absolute_uri }}">
+<meta name="title" content="About — Laís Carvalho">
+<meta name="description" content="Software developer, open-source advocate, and community builder. Notes from the intersection of AI, engineering, and people.">
+<meta property="og:type" content="profile">
+<meta property="og:url" content="{{ request.build_absolute_uri }}">
+<meta property="og:title" content="About — Laís Carvalho">
+<meta property="og:description" content="Software developer, open-source advocate, and community builder.">
+<meta property="twitter:card" content="summary">
+<meta property="twitter:title" content="About — Laís Carvalho">
+{% endblock %}
+
+{% block content %}
+
+<section class="px-10 py-14 border-t border-sand max-w-[740px]">
+
+  {# ---- Header ---- #}
+  <div class="mb-10">
+    <span class="inline-block text-[11px] font-medium tracking-[0.1em] uppercase text-sienna bg-sienna/10 px-3 py-1 rounded-[2px] mb-5">About</span>
+    <h1 class="font-serif text-[36px] font-semibold leading-[1.2] text-ink mb-4">Laís Carvalho</h1>
+    <p class="text-[15px] leading-[1.7] text-ink-muted">Software developer, open-source advocate, and community builder. Writing at the intersection of AI, engineering, and people.</p>
+  </div>
+
+  {# ---- Body: from About model if set, otherwise static ---- #}
+  {% if about and about.body %}
+    <div class="prose max-w-none">
+      {{ about.body|markdown }}
+    </div>
+  {% else %}
+    <div class="prose max-w-none">
+      <p>
+        I'm a software developer and open-source advocate who believes people are always the best part of any system.
+        My name appears in Goethe's Faust — which is either a great icebreaker or a warning, depending on who you ask.
+      </p>
+      <p>
+        Currently at <strong>Workday</strong>, where I work on developer tooling and platform engineering.
+        Previously I was a Developer Advocate at Quansight and QuantumBlack/McKinsey, where I spent my time translating
+        complex technical ideas into things humans actually want to read and use.
+      </p>
+      <p>
+        I care a lot about making tech more accessible — especially for people who don't see themselves reflected in it yet.
+        I co-organise <strong>Humble Data Workshops</strong>, which introduce data science to underrepresented communities,
+        and I'm involved with <strong>EuroPython</strong> (you can reach me at lais@europython.eu).
+      </p>
+      <p>
+        On this blog I write about open source, AI engineering, and the communities that make it all worth doing.
+      </p>
+
+      <h2>Background</h2>
+      <ul>
+        <li>BSc Information Technology, College of Computing Technology (2017–2021)</li>
+        <li>General Engineering, Trinity College Dublin (2015–2016)</li>
+      </ul>
+
+      <h2>Talks &amp; community</h2>
+      <ul>
+        <li><em>Python and Freedom and Bias</em> — PyCon Italia 2024</li>
+        <li><em>Community Conferences under the Hood</em> — PyCon DE 2024</li>
+        <li><em>Leading with Empathy in Tech</em> — Women in DevOps 2023</li>
+        <li>Humble Data Workshops — multiple editions (2021–present)</li>
+      </ul>
+    </div>
+  {% endif %}
+
+  {# ---- Social links ---- #}
+  <div class="mt-10 pt-8 border-t border-sand flex gap-5 flex-wrap">
+    <a href="https://github.com/laisbsc" class="text-[13px] text-ink-muted hover:text-cobalt no-underline">GitHub</a>
+    <a href="https://twitter.com/lais_bsc" class="text-[13px] text-ink-muted hover:text-cobalt no-underline">Twitter / X</a>
+    <a href="https://linkedin.com/in/laisbsc" class="text-[13px] text-ink-muted hover:text-cobalt no-underline">LinkedIn</a>
+    <a href="mailto:lais@europython.eu" class="text-[13px] text-ink-muted hover:text-cobalt no-underline">Email</a>
+  </div>
+
+</section>
+
+{% endblock %}

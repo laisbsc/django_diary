@@ -34,7 +34,12 @@
     {# TODO: add URL names for these pages when created #}
     <li><a href="#" class="text-[13px] text-ink-muted no-underline">AI &amp; Tools</a></li>
     <li><a href="#" class="text-[13px] text-ink-muted no-underline">Community</a></li>
-    <li><a href="#" class="text-[13px] text-ink-muted no-underline">About</a></li>
+    <li>
+      <a href="{% url 'about' %}"
+         class="text-[13px] no-underline {% if request.resolver_match.url_name == 'about' %}text-cobalt font-medium{% else %}text-ink-muted{% endif %}">
+        About
+      </a>
+    </li>
   </ul>
   {# TODO: wire to a newsletter/subscribe page or modal — candidate for a SiteSettings model #}
   <button class="text-xs font-medium text-cobalt border border-cobalt px-4 py-1.5 rounded-[2px] bg-transparent cursor-pointer tracking-[0.04em] font-sans">Subscribe</button>
@@ -48,9 +53,9 @@
   <div class="font-serif text-base text-cream opacity-60">laís.</div>
   <ul class="flex gap-5 list-none">
     {# TODO: move these hrefs to a SiteSettings model when added #}
-    <li><a href="#" class="text-xs text-cream/40 no-underline">Twitter / X</a></li>
-    <li><a href="#" class="text-xs text-cream/40 no-underline">LinkedIn</a></li>
-    <li><a href="#" class="text-xs text-cream/40 no-underline">RSS</a></li>
+    <li><a href="https://twitter.com/lais_bsc" class="text-xs text-cream/40 no-underline">Twitter / X</a></li>
+    <li><a href="https://linkedin.com/in/laisbsc" class="text-xs text-cream/40 no-underline">LinkedIn</a></li>
+    <li><a href="https://github.com/laisbsc" class="text-xs text-cream/40 no-underline">GitHub</a></li>
     <li><a href="#" class="text-xs text-cream/40 no-underline">Newsletter</a></li>
   </ul>
 </footer>
