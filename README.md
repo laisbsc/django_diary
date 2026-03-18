@@ -1,26 +1,76 @@
-# Django Travel Diary
+# laís. — personal blog
 
-A web application built with Django that allows users to create and manage their travel diaries.
+A travel and writing blog built with Django, deployed on Render. Posts support Markdown, interactive maps via Folium, and AI-assisted post creation (in progress).
 
-## Description
+## Stack
 
-This travel diary application enables users to document their travels, add entries with dates, locations, and memories. Built with Django framework and deployed on Heroku.
+- **Backend:** Django 5.2, Python 3.13
+- **Database:** PostgreSQL (Render) / SQLite (local)
+- **Static files:** WhiteNoise
+- **Media uploads:** Cloudflare R2
+- **Maps:** Folium
+- **Observability:** Logfire
+- **Package manager:** uv
 
-## Prerequisites
+## Local setup
 
-- Python 3.8+
-- pip
-- virtualenv
-
-## Local Setup
-
-1. Clone the repository
 ```bash
-git clone <repository-url>
-cd django-travel-diary
+git clone https://github.com/laisbsc/django_diary.git
+cd django_diary
+
+# Install dependencies
+uv sync
+
+# Copy and fill in environment variables
+cp .env.example .env
+
+# Run migrations
+uv run python manage.py migrate
+
+# Create a superuser
+uv run python manage.py createsuperuser
+
+# Start the dev server
+uv run python manage.py runserver
 ```
 
-2. Create a virtual environment
+App runs at `http://127.0.0.1:8000`. Admin at `/admin`.
+
+## Environment variables
+
+See `.env.example`. Required locally: `SECRET_KEY` (base64-encoded). Everything else is production-only and set in the Render dashboard.
+
+## Deployment
+
+Deployed via `render.yaml` (Infrastructure as Code). Two environments:
+
+| Environment | Branch | Database |
+|---|---|---|
+| Production | `main` | Render PostgreSQL Starter |
+| Staging | `staging` | Render PostgreSQL Free (ephemeral) |
+
+Render runs the following on each deploy:
 ```bash
-python -m venv venv
+pip install uv && uv sync --frozen && uv run python manage.py collectstatic --no-input && uv run python manage.py migrate
 ```
+
+## Project structure
+
+```
+travel_diaries/settings/
+    base.py       # shared settings
+    local.py      # local dev (SQLite, DEBUG=True)
+    production.py # Render (PostgreSQL, WhiteNoise, R2)
+
+blog/             # posts, categories, about page
+map/              # location model + Folium map views
+templates/        # project-level templates (base, blog list/detail)
+docs/             # brand.md, seo.md
+```
+
+## Docs
+
+- [`docs/brand.md`](docs/brand.md) — design system and brand guidelines
+- [`docs/seo.md`](docs/seo.md) — SEO strategy and deployment checklist
+- [`FRONTEND.md`](FRONTEND.md) — frontend dev conventions
+- [`PLAN.md`](PLAN.md) — development roadmap
