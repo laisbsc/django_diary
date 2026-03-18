@@ -1,6 +1,24 @@
 {% extends 'base.html' %}
+{% load blog_filters %}
 
 {% block title %}{{ post.title }} — laís.{% endblock %}
+
+{% block meta %}
+<meta name="title" content="{{ post.title }}">
+<meta name="description" content="{{ post.excerpt|truncatechars:160 }}">
+<meta property="og:type" content="article">
+<meta property="og:url" content="{{ request.build_absolute_uri }}">
+<meta property="og:title" content="{{ post.title }}">
+<meta property="og:description" content="{{ post.excerpt|truncatechars:160 }}">
+{% if post.cover_image %}
+<meta property="og:image" content="{{ request.build_absolute_uri }}{{ post.cover_image.url }}">
+<meta property="twitter:card" content="summary_large_image">
+{% else %}
+<meta property="twitter:card" content="summary">
+{% endif %}
+<meta property="twitter:title" content="{{ post.title }}">
+<meta property="twitter:description" content="{{ post.excerpt|truncatechars:160 }}">
+{% endblock %}
 
 {% block content %}
 
@@ -21,8 +39,7 @@
     </div>
 
     <div class="article-body">
-      {# Field is `content` now — will be renamed to `body` when rich text is added in Phase 2 #}
-      {{ post.content|linebreaks }}
+      {{ post.body|markdown }}
     </div>
   </div>
 

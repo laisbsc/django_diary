@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /config/
+Disallow: /private/
+
+# Point search engines to your sitemap
+Sitemap: https://laisbsc.dev/sitemap.xml
