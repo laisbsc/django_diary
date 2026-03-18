@@ -1,4 +1,4 @@
-{% load static %}
+{% load static tailwind_tags %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,38 +17,41 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="{% static 'blog/css/main.css' %}">
+  {% tailwind_css %}
   {% block extra_css %}{% endblock %}
 </head>
-<body>
+<body class="bg-cream font-sans text-ink min-h-screen flex flex-col">
 
-<nav class="nav">
-  <a href="{% url 'post_list' %}" class="nav-logo">laís<span>.</span></a>
-  <ul class="nav-links">
-    <li class="{% if request.resolver_match.url_name == 'post_list' %}active{% endif %}">
-      <a href="{% url 'post_list' %}">Writing</a>
+<nav class="bg-cream border-b border-sand px-10 h-14 flex items-center justify-between">
+  <a href="{% url 'post_list' %}" class="font-serif text-[19px] font-semibold text-ink no-underline">laís<span class="text-cobalt">.</span></a>
+  <ul class="flex gap-7 list-none">
+    <li>
+      <a href="{% url 'post_list' %}"
+         class="text-[13px] no-underline {% if request.resolver_match.url_name == 'post_list' %}text-cobalt font-medium{% else %}text-ink-muted{% endif %}">
+        Writing
+      </a>
     </li>
     {# TODO: add URL names for these pages when created #}
-    <li><a href="#">AI &amp; Tools</a></li>
-    <li><a href="#">Community</a></li>
-    <li><a href="#">About</a></li>
+    <li><a href="#" class="text-[13px] text-ink-muted no-underline">AI &amp; Tools</a></li>
+    <li><a href="#" class="text-[13px] text-ink-muted no-underline">Community</a></li>
+    <li><a href="#" class="text-[13px] text-ink-muted no-underline">About</a></li>
   </ul>
   {# TODO: wire to a newsletter/subscribe page or modal — candidate for a SiteSettings model #}
-  <button class="nav-cta">Subscribe</button>
+  <button class="text-xs font-medium text-cobalt border border-cobalt px-4 py-1.5 rounded-[2px] bg-transparent cursor-pointer tracking-[0.04em] font-sans">Subscribe</button>
 </nav>
 
-<main class="main-content">
+<main class="flex-1">
   {% block content %}{% endblock %}
 </main>
 
-<footer class="footer">
-  <div class="footer-logo">laís.</div>
-  <ul class="footer-links">
+<footer class="px-10 py-6 border-t border-cream/[0.08] bg-ink flex justify-between items-center">
+  <div class="font-serif text-base text-cream opacity-60">laís.</div>
+  <ul class="flex gap-5 list-none">
     {# TODO: move these hrefs to a SiteSettings model when added #}
-    <li><a href="#">Twitter / X</a></li>
-    <li><a href="#">LinkedIn</a></li>
-    <li><a href="#">RSS</a></li>
-    <li><a href="#">Newsletter</a></li>
+    <li><a href="#" class="text-xs text-cream/40 no-underline">Twitter / X</a></li>
+    <li><a href="#" class="text-xs text-cream/40 no-underline">LinkedIn</a></li>
+    <li><a href="#" class="text-xs text-cream/40 no-underline">RSS</a></li>
+    <li><a href="#" class="text-xs text-cream/40 no-underline">Newsletter</a></li>
   </ul>
 </footer>
 

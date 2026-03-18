@@ -4,44 +4,46 @@
 
 {% block content %}
 
-<section class="hero">
+{# ---- Hero ---- #}
+<section class="px-10 pt-16 pb-14 grid grid-cols-2 gap-12 items-center">
   <div>
-    {# blog_tagline → settings.BLOG_TAGLINE, passed via view context or a context processor #}
-    <span class="hero-tag">{{ blog_tagline }}</span>
-    <h1>Building in the<br><em>age of agents</em></h1>
-    <p class="hero-sub">Notes from the intersection of open source, community, and AI engineering. By someone who still thinks people are the best part of any system.</p>
-    <div class="hero-actions">
+    {# blog_tagline → settings.BLOG_TAGLINE, passed via view context #}
+    <span class="inline-block text-[11px] font-medium tracking-[0.1em] uppercase text-sienna bg-sienna/10 px-3 py-1 rounded-[2px] mb-5">{{ blog_tagline }}</span>
+    <h1 class="font-serif text-[46px] font-semibold leading-[1.18] text-ink mb-5">Building in the<br><em class="not-italic italic text-cobalt">age of agents</em></h1>
+    <p class="text-[15px] leading-[1.7] text-ink-muted mb-8 max-w-[380px]">Notes from the intersection of open source, community, and AI engineering. By someone who still thinks people are the best part of any system.</p>
+    <div class="flex gap-3.5 items-center">
       {% if featured_post %}
-        <a href="{% url 'post_detail' slug=featured_post.slug %}" class="btn-primary">Read latest</a>
+        <a href="{% url 'post_detail' slug=featured_post.slug %}" class="bg-cobalt text-white text-[13px] font-medium px-6 py-2.5 rounded-[2px] tracking-[0.04em] inline-block">Read latest</a>
       {% endif %}
-      <a href="{% url 'post_list' %}" class="btn-ghost">All posts</a>
+      <a href="{% url 'post_list' %}" class="text-ink-muted text-[13px] inline-flex items-center gap-1.5">All posts <span class="text-amber">→</span></a>
     </div>
   </div>
 
+  {# ---- Featured card ---- #}
   <div>
-    <div class="featured-card">
-      <div class="featured-card-img">
+    <div class="bg-sand rounded border border-sand/60 overflow-hidden">
+      <div class="h-44 bg-gradient-to-br from-cobalt to-[#0E2E87] relative flex items-center justify-center overflow-hidden">
         {% if featured_post and featured_post.cover_image %}
-          <img src="{{ featured_post.cover_image.url }}" alt="{{ featured_post.title }}">
+          <img src="{{ featured_post.cover_image.url }}" alt="{{ featured_post.title }}" class="w-full h-full object-cover">
         {% else %}
-          <div class="abstract"></div>
-          <div class="abstract2"></div>
-          <div class="abstract3"></div>
-          <span class="abstract-label">Featured essay</span>
+          <div class="w-[120px] h-[120px] rounded-full border-2 border-amber/40 absolute top-[30px] left-[60px]"></div>
+          <div class="w-20 h-20 rounded-full bg-amber/15 absolute bottom-5 right-[50px]"></div>
+          <div class="w-10 h-10 bg-amber rounded-[2px] rotate-[18deg] absolute top-10 right-20 opacity-70"></div>
+          <span class="font-serif text-[13px] text-cream/60 tracking-[0.08em] absolute bottom-[14px] left-[18px] italic">Featured essay</span>
         {% endif %}
       </div>
       {% if featured_post %}
-      <div class="featured-card-body">
-        <div class="feat-tag">{{ featured_post.category.name }}</div>
-        <h3>{{ featured_post.title }}</h3>
-        <p>{{ featured_post.excerpt }}</p>
-        <div class="card-meta">
-          <div class="avatar">
-            {# TODO: add a get_initials template filter in blog/templatetags/ for proper first+last initials #}
+      <div class="p-5">
+        <div class="text-[10px] font-medium tracking-[0.1em] uppercase text-sienna mb-2">{{ featured_post.category.name }}</div>
+        <h3 class="font-serif text-[17px] font-semibold text-ink leading-[1.35] mb-2">{{ featured_post.title }}</h3>
+        <p class="text-[13px] text-ink-muted leading-[1.6] mb-3.5">{{ featured_post.excerpt }}</p>
+        <div class="flex items-center gap-2.5 text-xs text-ink-light">
+          <div class="w-6 h-6 bg-cobalt rounded-full flex items-center justify-center text-white text-[10px] font-medium shrink-0">
+            {# TODO: add get_initials template filter for proper first+last initials #}
             {{ featured_post.author.get_full_name|slice:":1" }}
           </div>
           <span>{{ featured_post.author.get_full_name }}</span>
-          <span class="dot"></span>
+          <span class="w-[3px] h-[3px] bg-sand rounded-full inline-block shrink-0"></span>
           <span>{{ featured_post.read_time }} min read</span>
         </div>
       </div>
@@ -50,29 +52,32 @@
   </div>
 </section>
 
-<section class="posts-section">
-  <div class="posts-header">
-    <h2>Recent writing</h2>
-    <a href="{% url 'post_list' %}" class="see-all">All posts →</a>
+{# ---- Post grid ---- #}
+<section class="px-10 py-12 border-t border-sand">
+  <div class="flex justify-between items-end mb-7">
+    <h2 class="font-serif text-2xl font-semibold text-ink">Recent writing</h2>
+    <a href="{% url 'post_list' %}" class="text-xs text-cobalt font-medium tracking-[0.04em]">All posts →</a>
   </div>
-  <div class="posts-grid">
+  <div class="grid grid-cols-3 gap-5">
     {% for post in posts %}
-    <a href="{% url 'post_detail' slug=post.slug %}" class="post-card">
-      {# category.color stores one of: cobalt | amber | sienna, mapping to a CSS custom property #}
-      <div class="post-card-bar" style="background: var(--{{ post.category.color }});"></div>
-      <div class="post-card-body">
-        <span class="post-tag" style="color: var(--{{ post.category.color }});">{{ post.category.name }}</span>
-        <h4>{{ post.title }}</h4>
-        <p>{{ post.excerpt }}</p>
-        <div class="post-meta">
+    <a href="{% url 'post_detail' slug=post.slug %}"
+       class="bg-white border border-sand rounded-[3px] overflow-hidden block text-ink hover:shadow-[0_4px_20px_rgba(21,63,179,0.08)] transition-shadow duration-200">
+      {# category.color stores one of: cobalt | amber | sienna — maps to a CSS custom property #}
+      <div class="h-[3px]" style="background: var(--{{ post.category.color }});"></div>
+      <div class="p-[18px]">
+        <span class="text-[10px] font-medium tracking-[0.1em] uppercase mb-2 inline-block"
+              style="color: var(--{{ post.category.color }});">{{ post.category.name }}</span>
+        <h4 class="font-serif text-[15px] font-semibold text-ink leading-[1.4] mb-2">{{ post.title }}</h4>
+        <p class="text-xs text-ink-muted leading-[1.6] mb-3.5">{{ post.excerpt }}</p>
+        <div class="text-[11px] text-ink-light flex gap-2 items-center">
           <span>{{ post.published_date|date:"M j, Y" }}</span>
-          <span class="dot"></span>
+          <span class="w-[3px] h-[3px] bg-sand rounded-full inline-block shrink-0"></span>
           <span>{{ post.read_time }} min</span>
         </div>
       </div>
     </a>
     {% empty %}
-    <p class="no-posts">No posts yet.</p>
+    <p class="text-[14px] text-ink-muted col-span-3">No posts yet.</p>
     {% endfor %}
   </div>
 </section>

@@ -4,6 +4,7 @@
 {% block title %}{{ post.title }} — laís.{% endblock %}
 
 {% block meta %}
+<link rel="canonical" href="{{ request.build_absolute_uri }}">
 <meta name="title" content="{{ post.title }}">
 <meta name="description" content="{{ post.excerpt|truncatechars:160 }}">
 <meta property="og:type" content="article">
@@ -22,53 +23,55 @@
 
 {% block content %}
 
-<section class="article-section">
-  <div>
-    <div class="article-header">
-      <div class="art-category">{{ post.category.name }} · {{ post.read_time }} min read</div>
-      <h2>{{ post.title }}</h2>
-      <div class="article-byline">
-        <div class="avatar">
-          {# First letter of full name. TODO: add a get_initials template filter in blog/templatetags/ for proper first+last initials #}
-          {{ post.author.get_full_name|slice:":1" }}
-        </div>
-        <span>{{ post.author.get_full_name }}</span>
-        <span class="dot"></span>
-        <span>{{ post.published_date|date:"F j, Y" }}</span>
-      </div>
-    </div>
+<section class="px-10 py-12 border-t border-sand grid grid-cols-[1fr_280px] gap-12">
 
-    <div class="article-body">
+  {# ---- Article ---- #}
+  <div>
+    <div class="text-[11px] font-medium tracking-[0.1em] uppercase text-cobalt mb-3.5">{{ post.category.name }} · {{ post.read_time }} min read</div>
+    <h2 class="font-serif text-[30px] font-semibold leading-[1.25] text-ink mb-3.5">{{ post.title }}</h2>
+    <div class="flex items-center gap-2.5 text-xs text-ink-light mb-6 pb-5 border-b border-sand">
+      <div class="w-6 h-6 bg-cobalt rounded-full flex items-center justify-center text-white text-[10px] font-medium shrink-0">
+        {# TODO: add get_initials template filter for proper first+last initials #}
+        {{ post.author.get_full_name|slice:":1" }}
+      </div>
+      <span>{{ post.author.get_full_name }}</span>
+      <span class="w-[3px] h-[3px] bg-sand rounded-full inline-block shrink-0"></span>
+      <span>{{ post.published_date|date:"F j, Y" }}</span>
+    </div>
+    <div class="prose max-w-none">
       {{ post.body|markdown }}
     </div>
   </div>
 
+  {# ---- Sidebar ---- #}
   <aside>
-    <div class="sidebar-widget">
-      <h5>Topics</h5>
-      <div class="tag-cloud">
-        {# categories → all Category objects, passed from view. current_category → post.category for active state #}
+    <div class="bg-sand rounded-[3px] p-5 mb-5">
+      <h5 class="font-serif text-sm font-semibold text-ink mb-3.5 pb-2.5 border-b border-ink/[0.15]">Topics</h5>
+      <div class="flex flex-wrap gap-1.5">
+        {# categories → all Category objects, passed from view #}
         {% for category in categories %}
         <a href="{% url 'post_list' %}?category={{ category.slug }}"
-           class="tag {% if category == post.category %}active{% endif %}">
+           class="text-[11px] px-2.5 py-1 rounded-[2px] no-underline
+                  {% if category == post.category %}bg-cobalt text-white border border-cobalt{% else %}text-ink-muted bg-cream/80 border border-ink/[0.15]{% endif %}">
           {{ category.name }}
         </a>
         {% endfor %}
       </div>
     </div>
 
-    <div class="sidebar-widget">
-      <h5>More recent</h5>
+    <div class="bg-sand rounded-[3px] p-5 mb-5">
+      <h5 class="font-serif text-sm font-semibold text-ink mb-3.5 pb-2.5 border-b border-ink/[0.15]">More recent</h5>
       {# recent_posts → latest 4 posts excluding current, passed from view #}
-      <ul class="recent-list">
+      <ul class="list-none">
         {% for recent in recent_posts %}
-        <li>
-          <a href="{% url 'post_detail' slug=recent.slug %}">{{ recent.title }}</a>
+        <li class="py-2 border-b border-ink/[0.1] last:border-0 text-xs text-ink-muted leading-[1.4] hover:text-cobalt">
+          <a href="{% url 'post_detail' slug=recent.slug %}" class="text-inherit no-underline">{{ recent.title }}</a>
         </li>
         {% endfor %}
       </ul>
     </div>
   </aside>
+
 </section>
 
 {% endblock %}

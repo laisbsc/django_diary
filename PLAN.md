@@ -127,7 +127,7 @@ Take raw travel notes (from Obsidian or Google Notes) and generate a draft blog 
 - Pydantic AI agent with structured output matching the `Post` model schema
 - Django view with a textarea (paste notes) → POST → agent → draft post review page → publish
 - `ANTHROPIC_API_KEY` (or other) added to env vars and `render.yaml`
-- Logfire already configured — AI calls will be traced automatically
+- Logfire already configured — AI calls will be traced automatical1ly
 
 ---
 

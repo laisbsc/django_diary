@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        --font-serif: 'Lora', Georgia, serif;
+        --font-sans:  'DM Sans', system-ui, sans-serif;
+        /* CSS custom properties kept for dynamic category colours driven by model data */
+        --cream:     #F2EBD5;
+        --amber:     #E8A62C;
+        --sand:      #D9C49C;
+        --sienna:    #D98723;
+        --cobalt:    #153FB3;
+        --ink:       #1A1610;
+        --ink-muted: #5C4F35;
+        --ink-light: #9A8A6A;
+    }
+}
