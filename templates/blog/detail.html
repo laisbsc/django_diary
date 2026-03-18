@@ -63,7 +63,7 @@
       <ul class="recent-list">
         {% for recent in recent_posts %}
         <li>
-          <a href="{% url 'post_detail' pk=recent.pk %}">{{ recent.title }}</a>
+          <a href="{% url 'post_detail' slug=recent.slug %}">{{ recent.title }}</a>
         </li>
         {% endfor %}
       </ul>

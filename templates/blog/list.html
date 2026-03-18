@@ -12,28 +12,32 @@
     <p class="hero-sub">Notes from the intersection of open source, community, and AI engineering. By someone who still thinks people are the best part of any system.</p>
     <div class="hero-actions">
       {% if featured_post %}
-        <a href="{% url 'post_detail' pk=featured_post.pk %}" class="btn-primary">Read latest</a>
+        <a href="{% url 'post_detail' slug=featured_post.slug %}" class="btn-primary">Read latest</a>
       {% endif %}
       <a href="{% url 'post_list' %}" class="btn-ghost">All posts</a>
     </div>
   </div>
 
   <div>
-    {% if featured_post %}
     <div class="featured-card">
       <div class="featured-card-img">
-        <div class="abstract"></div>
-        <div class="abstract2"></div>
-        <div class="abstract3"></div>
-        <span class="abstract-label">Featured essay</span>
+        {% if featured_post and featured_post.cover_image %}
+          <img src="{{ featured_post.cover_image.url }}" alt="{{ featured_post.title }}">
+        {% else %}
+          <div class="abstract"></div>
+          <div class="abstract2"></div>
+          <div class="abstract3"></div>
+          <span class="abstract-label">Featured essay</span>
+        {% endif %}
       </div>
+      {% if featured_post %}
       <div class="featured-card-body">
         <div class="feat-tag">{{ featured_post.category.name }}</div>
         <h3>{{ featured_post.title }}</h3>
         <p>{{ featured_post.excerpt }}</p>
         <div class="card-meta">
           <div class="avatar">
-            {# First letter of full name. TODO: add a get_initials template filter in blog/templatetags/ for proper first+last initials #}
+            {# TODO: add a get_initials template filter in blog/templatetags/ for proper first+last initials #}
             {{ featured_post.author.get_full_name|slice:":1" }}
           </div>
           <span>{{ featured_post.author.get_full_name }}</span>
@@ -41,8 +45,8 @@
           <span>{{ featured_post.read_time }} min read</span>
         </div>
       </div>
+      {% endif %}
     </div>
-    {% endif %}
   </div>
 </section>
 
@@ -53,7 +57,7 @@
   </div>
   <div class="posts-grid">
     {% for post in posts %}
-    <a href="{% url 'post_detail' pk=post.pk %}" class="post-card">
+    <a href="{% url 'post_detail' slug=post.slug %}" class="post-card">
       {# category.color stores one of: cobalt | amber | sienna, mapping to a CSS custom property #}
       <div class="post-card-bar" style="background: var(--{{ post.category.color }});"></div>
       <div class="post-card-body">
