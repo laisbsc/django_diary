@@ -1,0 +1,46 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}laís.{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'blog/css/main.css' %}">
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+<nav class="nav">
+  <a href="{% url 'post_list' %}" class="nav-logo">laís<span>.</span></a>
+  <ul class="nav-links">
+    <li class="{% if request.resolver_match.url_name == 'post_list' %}active{% endif %}">
+      <a href="{% url 'post_list' %}">Writing</a>
+    </li>
+    {# TODO: add URL names for these pages when created #}
+    <li><a href="#">AI &amp; Tools</a></li>
+    <li><a href="#">Community</a></li>
+    <li><a href="#">About</a></li>
+  </ul>
+  {# TODO: wire to a newsletter/subscribe page or modal — candidate for a SiteSettings model #}
+  <button class="nav-cta">Subscribe</button>
+</nav>
+
+{% block content %}{% endblock %}
+
+<footer class="footer">
+  <div class="footer-logo">laís.</div>
+  <ul class="footer-links">
+    {# TODO: move these hrefs to a SiteSettings model when added #}
+    <li><a href="#">Twitter / X</a></li>
+    <li><a href="#">LinkedIn</a></li>
+    <li><a href="#">RSS</a></li>
+    <li><a href="#">Newsletter</a></li>
+  </ul>
+</footer>
+
+{% block extra_js %}{% endblock %}
+</body>
+</html>

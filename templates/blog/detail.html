@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ post.title }} — laís.{% endblock %}
+
+{% block content %}
+
+<section class="article-section">
+  <div>
+    <div class="article-header">
+      <div class="art-category">{{ post.category.name }} · {{ post.read_time }} min read</div>
+      <h2>{{ post.title }}</h2>
+      <div class="article-byline">
+        <div class="avatar">
+          {# First letter of full name. TODO: add a get_initials template filter in blog/templatetags/ for proper first+last initials #}
+          {{ post.author.get_full_name|slice:":1" }}
+        </div>
+        <span>{{ post.author.get_full_name }}</span>
+        <span class="dot"></span>
+        <span>{{ post.published_date|date:"F j, Y" }}</span>
+      </div>
+    </div>
+
+    <div class="article-body">
+      {# Field is `content` now — will be renamed to `body` when rich text is added in Phase 2 #}
+      {{ post.content|linebreaks }}
+    </div>
+  </div>
+
+  <aside>
+    <div class="sidebar-widget">
+      <h5>Topics</h5>
+      <div class="tag-cloud">
+        {# categories → all Category objects, passed from view. current_category → post.category for active state #}
+        {% for category in categories %}
+        <a href="{% url 'post_list' %}?category={{ category.slug }}"
+           class="tag {% if category == post.category %}active{% endif %}">
+          {{ category.name }}
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="sidebar-widget">
+      <h5>More recent</h5>
+      {# recent_posts → latest 4 posts excluding current, passed from view #}
+      <ul class="recent-list">
+        {% for recent in recent_posts %}
+        <li>
+          <a href="{% url 'post_detail' pk=recent.pk %}">{{ recent.title }}</a>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </aside>
+</section>
+
+{% endblock %}

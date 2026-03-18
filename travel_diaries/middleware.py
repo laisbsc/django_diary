@@ -9,7 +9,7 @@ class PageLoadTimeMiddleware:
         self.get_response = get_response
         # Define a histogram metric for page load times.
         # Histograms are great for durations as they provide distribution insights.
-        # 'unit' helps Logfire understand the measurement (seconds in this case).
+        # 'unit' helps Logfire understand the measurement (miliseconds in this case).
         self.page_load_histogram = logfire.metric_histogram(
             'django_page_load_time',
             unit='ms', #miliseconds

@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block title %}Writing — laís.{% endblock %}
+
+{% block content %}
+
+<section class="hero">
+  <div>
+    {# blog_tagline → settings.BLOG_TAGLINE, passed via view context or a context processor #}
+    <span class="hero-tag">{{ blog_tagline }}</span>
+    <h1>Building in the<br><em>age of agents</em></h1>
+    <p class="hero-sub">Notes from the intersection of open source, community, and AI engineering. By someone who still thinks people are the best part of any system.</p>
+    <div class="hero-actions">
+      {% if featured_post %}
+        <a href="{% url 'post_detail' pk=featured_post.pk %}" class="btn-primary">Read latest</a>
+      {% endif %}
+      <a href="{% url 'post_list' %}" class="btn-ghost">All posts</a>
+    </div>
+  </div>
+
+  <div>
+    {% if featured_post %}
+    <div class="featured-card">
+      <div class="featured-card-img">
+        <div class="abstract"></div>
+        <div class="abstract2"></div>
+        <div class="abstract3"></div>
+        <span class="abstract-label">Featured essay</span>
+      </div>
+      <div class="featured-card-body">
+        <div class="feat-tag">{{ featured_post.category.name }}</div>
+        <h3>{{ featured_post.title }}</h3>
+        <p>{{ featured_post.excerpt }}</p>
+        <div class="card-meta">
+          <div class="avatar">
+            {# First letter of full name. TODO: add a get_initials template filter in blog/templatetags/ for proper first+last initials #}
+            {{ featured_post.author.get_full_name|slice:":1" }}
+          </div>
+          <span>{{ featured_post.author.get_full_name }}</span>
+          <span class="dot"></span>
+          <span>{{ featured_post.read_time }} min read</span>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+<section class="posts-section">
+  <div class="posts-header">
+    <h2>Recent writing</h2>
+    <a href="{% url 'post_list' %}" class="see-all">All posts →</a>
+  </div>
+  <div class="posts-grid">
+    {% for post in posts %}
+    <a href="{% url 'post_detail' pk=post.pk %}" class="post-card">
+      {# category.color stores one of: cobalt | amber | sienna, mapping to a CSS custom property #}
+      <div class="post-card-bar" style="background: var(--{{ post.category.color }});"></div>
+      <div class="post-card-body">
+        <span class="post-tag" style="color: var(--{{ post.category.color }});">{{ post.category.name }}</span>
+        <h4>{{ post.title }}</h4>
+        <p>{{ post.excerpt }}</p>
+        <div class="post-meta">
+          <span>{{ post.published_date|date:"M j, Y" }}</span>
+          <span class="dot"></span>
+          <span>{{ post.read_time }} min</span>
+        </div>
+      </div>
+    </a>
+    {% empty %}
+    <p class="no-posts">No posts yet.</p>
+    {% endfor %}
+  </div>
+</section>
+
+{% endblock %}
