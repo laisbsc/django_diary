@@ -1,4 +1,3 @@
-import base64
 import os
 from pathlib import Path
 
@@ -9,10 +8,8 @@ load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
-encoded_key = os.environ.get("SECRET_KEY")
-if encoded_key:
-    SECRET_KEY = base64.b64decode(encoded_key).decode('utf-8')
-else:
+SECRET_KEY = os.environ.get("SECRET_KEY")
+if not SECRET_KEY:
     raise Exception("SECRET_KEY environment variable not set.")
 
 INSTALLED_APPS = [
