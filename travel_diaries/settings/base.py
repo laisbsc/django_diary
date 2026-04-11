@@ -85,13 +85,36 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+    },
     'handlers': {
         'logfire': {
             'class': 'logfire.LogfireLoggingHandler',
         },
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['logfire', 'console'],
+            'level': 'WARNING',
+            'propagate': False,
+        },
+        'blog': {
+            'handlers': ['logfire', 'console'],
+            'level': 'DEBUG' if os.environ.get('DEBUG', 'False') == 'True' else 'INFO',
+            'propagate': False,
+        },
     },
     'root': {
-        'handlers': ['logfire'],
+        'handlers': ['logfire', 'console'],
+        'level': 'WARNING',
     },
 }
 
