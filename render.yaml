@@ -44,6 +44,8 @@ services:
         sync: false
       - key: CLOUDFLARE_R2_MEDIA_PREFIX
         value: prod
+      - key: OPENAI_API_KEY
+        sync: false
 
   - type: web
     name: django-diary-staging
@@ -81,3 +83,5 @@ services:
         sync: false
       - key: CLOUDFLARE_R2_MEDIA_PREFIX
         value: staging
+      - key: OPENAI_API_KEY
+        sync: false

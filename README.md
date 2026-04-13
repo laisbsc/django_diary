@@ -31,14 +31,31 @@ uv run python manage.py migrate
 uv run python manage.py createsuperuser
 
 # Start the dev server
-uv run python manage.py runserver
+DJANGO_SETTINGS_MODULE=travel_diaries.settings.local uv run python manage.py runserver
 ```
 
 App runs at `http://127.0.0.1:8000`. Admin at `/admin`.
 
+### With Tailwind CSS live reload
+
+Run these in two separate terminals:
+
+```bash
+# Terminal 1 — CSS watcher
+DJANGO_SETTINGS_MODULE=travel_diaries.settings.local uv run python manage.py tailwind start
+
+# Terminal 2 — dev server
+DJANGO_SETTINGS_MODULE=travel_diaries.settings.local uv run python manage.py runserver
+```
+
+### AI image generator
+
+Requires `OPENAI_API_KEY` in `.env`. Visit `/ai/generate-image/` while logged in.
+The page will hang for ~10–20 seconds while the image is generated — this is expected.
+
 ## Environment variables
 
-See `.env.example`. Required locally: `SECRET_KEY` (base64-encoded). Everything else is production-only and set in the Render dashboard.
+See `.env.example`. Required locally: `SECRET_KEY` and `OPENAI_API_KEY`. Everything else is production-only and set in the Render dashboard.
 
 ## Deployment
 

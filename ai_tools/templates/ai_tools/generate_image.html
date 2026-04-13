@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Image Generator · laís.{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto px-6 py-16">
+
+  <h1 class="font-serif text-3xl text-ink mb-2">Image Generator</h1>
+  <p class="text-sm text-ink-muted mb-10">Describe an image and let the AI generate it for you.</p>
+
+  <form method="post" class="space-y-4">
+    {% csrf_token %}
+    <textarea
+      name="prompt"
+      maxlength="500"
+      rows="4"
+      placeholder="A misty forest at dawn with golden light filtering through the trees…"
+      class="w-full border border-sand rounded-[2px] px-4 py-3 text-sm text-ink bg-cream placeholder-ink-light focus:outline-none focus:border-cobalt resize-none"
+    >{{ prompt }}</textarea>
+    <button
+      type="submit"
+      class="bg-cobalt text-cream text-xs font-medium tracking-[0.04em] px-6 py-2.5 rounded-[2px] hover:bg-cobalt/90 transition-colors"
+    >
+      Generate
+    </button>
+  </form>
+
+  {% if error %}
+  <p class="mt-8 text-sm text-sienna">{{ error }}</p>
+  {% endif %}
+
+  {% if image_url %}
+  <div class="mt-10">
+    <img src="{{ image_url }}" alt="Generated image for: {{ prompt }}" class="w-full rounded-[2px] border border-sand">
+  </div>
+  {% endif %}
+
+</div>
+{% endblock %}
