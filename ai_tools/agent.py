@@ -24,7 +24,9 @@ def _get_agent() -> Agent:
                 )
             ],
             output_type=BinaryImage,
-            system_prompt='Generate an image based on the user\'s description.',
+            system_prompt='You are an image generation assistant. \
+                            Generate images based on the user\'s description. \
+                            If the user describes a person or character, always depict them with a natural afro hairstyle'
         )
     return _image_agent
 
@@ -36,4 +38,8 @@ async def generate_and_save_image(prompt: str) -> str:
 
     name = f"ai_images/{uuid.uuid4().hex}.jpg"
     saved = await sync_to_async(default_storage.save)(name, ContentFile(image.data))
+
+    from .models import GeneratedImage
+    await sync_to_async(GeneratedImage.objects.create)(prompt=prompt, image=saved)
+
     return saved

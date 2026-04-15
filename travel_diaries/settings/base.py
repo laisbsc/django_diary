@@ -90,7 +90,7 @@ LOGGING = {
     'disable_existing_loggers': False,
     'formatters': {
         'verbose': {
-            'format': '{levelname} {asctime} {module} {message}',
+            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
             'style': '{',
         },
     },
@@ -106,6 +106,11 @@ LOGGING = {
     'loggers': {
         'django': {
             'handlers': ['logfire', 'console'],
+            'level': 'WARNING',
+            'propagate': False,
+        },
+        'django.db.backends': {
+            'handlers': ['console'],
             'level': 'WARNING',
             'propagate': False,
         },
@@ -128,7 +133,7 @@ api_key = os.environ.get('LOGFIRE_TOKEN')
 if api_key:
     logfire.configure(
         token=api_key,
-        service_name='django-travel-diary',
+        service_name='django_app',
         environment=ENVIRONMENT,
     )
     logfire.instrument_system_metrics({
@@ -141,3 +146,4 @@ if api_key:
     })
     logfire.instrument_django()
     logfire.instrument_psycopg()
+    logfire.instrument_pydantic_ai()

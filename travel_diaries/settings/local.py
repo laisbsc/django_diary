@@ -1,3 +1,6 @@
+import os
+os.environ.setdefault('ENVIRONMENT', 'local')
+
 from .base import *
 
 DEBUG = True

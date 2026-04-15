@@ -594,7 +594,7 @@ requires-dist = [
     { name = "django-tailwind", specifier = ">=3.8.0" },
     { name = "folium", specifier = ">=0.20.0" },
     { name = "gunicorn", specifier = ">=23.0.0" },
-    { name = "logfire", extras = ["django", "sqlite3", "system-metrics", "psycopg"], specifier = ">=4.0.0" },
+    { name = "logfire", extras = ["django", "psycopg", "pydantic-ai", "sqlite3", "system-metrics"], specifier = ">=4.0.0" },
     { name = "markdown", specifier = ">=3.7" },
     { name = "pillow", specifier = ">=11.0.0" },
     { name = "psycopg", extras = ["binary", "pool"], specifier = ">=3.0.0" },

@@ -31,8 +31,12 @@
         Writing
       </a>
     </li>
-    {# TODO: add URL names for these pages when created #}
-    <li><a href="#" class="text-[13px] text-ink-muted no-underline">AI &amp; Tools</a></li>
+    <li>
+      <a href="{% url 'generate_image' %}"
+         class="text-[13px] no-underline {% if request.resolver_match.url_name == 'generate_image' %}text-cobalt font-medium{% else %}text-ink-muted{% endif %}">
+        AI &amp; Tools
+      </a>
+    </li>
     <li><a href="#" class="text-[13px] text-ink-muted no-underline">Community</a></li>
     <li>
       <a href="{% url 'about' %}"

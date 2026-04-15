@@ -5,8 +5,14 @@
 {% block content %}
 <div class="max-w-2xl mx-auto px-6 py-16">
 
-  <h1 class="font-serif text-3xl text-ink mb-2">Image Generator</h1>
-  <p class="text-sm text-ink-muted mb-10">Describe an image and let the AI generate it for you.</p>
+  <div class="flex items-baseline justify-between mb-2">
+    <h1 class="font-serif text-3xl text-ink">Image Generator</h1>
+    <a href="{% url 'image_gallery' %}"
+       class="text-xs font-medium text-cobalt border border-cobalt px-4 py-1.5 rounded-[2px] hover:bg-cobalt hover:text-cream transition-colors tracking-[0.04em]">
+      View gallery
+    </a>
+  </div>
+  <p class="text-sm text-ink-muted mb-10">Describe an object or animal and let the AI add an afro hair to it.</p>
 
   <form method="post" class="space-y-4">
     {% csrf_token %}
