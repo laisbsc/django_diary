@@ -5,6 +5,7 @@ from django.core.files.storage import default_storage
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django_q.tasks import async_task
+from opentelemetry import propagate
 
 from .models import GeneratedImage
 
@@ -31,8 +32,14 @@ def generate_image_view(request):
     if request.method == 'POST':
         prompt = request.POST.get('prompt', '').strip()
         if prompt:
-            image = GeneratedImage.objects.create(prompt=prompt)
-            async_task('ai_tools.tasks.generate_image_task', image.pk)
+            with logfire.span('enqueue image generation', prompt=prompt):
+                image = GeneratedImage.objects.create(prompt=prompt)
+                # Propagate the current trace context into the background task
+                # so its spans appear nested under this request's trace in Logfire.
+                carrier: dict = {}
+                propagate.inject(carrier)
+                async_task('ai_tools.tasks.generate_image_task', image.pk, trace_context=carrier)
+                logfire.info('image task enqueued', image_id=image.pk, prompt=prompt)
             return redirect('image_pending', pk=image.pk)
 
     return render(request, 'ai_tools/generate_image.html')
