@@ -20,13 +20,7 @@ class PageLoadTimeMiddleware:
         # Record the start time when the request enters the middleware.
         start_time = time.monotonic()
 
-        # Process the request and get the response.
-        response = self.get_response(request)
-
-        # Calculate the duration after the response has been generated.
-        duration = time.monotonic() - start_time
-
-        # Get the view name or URL path for better metric categorization.
+        # Resolve view name up front so it's available as a span attribute.
         view_name = "unknown_view"
         try:
             match = resolve(request.path_info)
@@ -37,8 +31,14 @@ class PageLoadTimeMiddleware:
             elif hasattr(match.func, '__class__'):
                 view_name = match.func.__class__.__name__
         except Resolver404:
-            # If URL doesn't resolve, use the path directly
             view_name = request.path
+
+        # Wrap the entire request in a span so all child spans (view, DB, AI) nest under it.
+        with logfire.span('page load', view=view_name, method=request.method):
+            response = self.get_response(request)
+
+        # Calculate the duration after the response has been generated.
+        duration = time.monotonic() - start_time
 
         # Record the duration using the histogram metric.
         # We add 'path' and 'view_name' as attributes to allow filtering and analysis

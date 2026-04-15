@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}AI Image Gallery · laís.{% endblock %}
+
+{% block content %}
+
+<div class="max-w-3xl mx-auto px-6 py-16">
+
+  {# ── Header ── #}
+  <div class="mb-14">
+    <div class="flex items-end justify-between">
+      <div>
+        <p class="text-[10px] font-semibold tracking-[0.14em] uppercase text-cobalt mb-2">AI · Generated</p>
+        <h1 class="font-serif text-[42px] font-semibold leading-none text-ink">Image Gallery</h1>
+      </div>
+      <a href="{% url 'generate_image' %}"
+         class="bg-cobalt text-cream text-xs font-medium tracking-[0.04em] px-6 py-2.5 rounded-[2px] hover:bg-cobalt/90 transition-colors mb-1">
+        Generate new
+      </a>
+    </div>
+    <div class="flex items-center gap-4 mt-4">
+      <div class="h-px flex-1 bg-sand"></div>
+      {% if images %}
+      <span class="text-[11px] tracking-[0.12em] uppercase text-ink-light font-medium">{{ images|length }} image{{ images|length|pluralize }}</span>
+      {% else %}
+      <span class="text-[11px] tracking-[0.12em] uppercase text-ink-light font-medium">No images yet</span>
+      {% endif %}
+      <div class="h-px flex-1 bg-sand"></div>
+    </div>
+  </div>
+
+  {# ── Gallery list ── #}
+  {% if images %}
+  <ol>
+    {% for img in images %}
+    <li class="group">
+      <a href="{% url 'image_detail' img.pk %}"
+         class="flex gap-6 py-7 border-b border-sand/70 items-start">
+
+        {# Entry number #}
+        <span class="font-serif text-[13px] text-sand group-hover:text-cobalt/40 transition-colors pt-1 w-6 shrink-0 tabular-nums select-none">
+          {{ forloop.counter|stringformat:"02d" }}
+        </span>
+
+        {# Prompt + date #}
+        <div class="flex-1 min-w-0">
+          <p class="font-serif text-[18px] italic text-ink leading-[1.45] mb-2
+                    group-hover:text-cobalt transition-colors duration-150">
+            "{{ img.prompt }}"
+          </p>
+          <span class="text-[11px] text-ink-light">{{ img.created_at|date:"M j, Y · g:i A" }}</span>
+        </div>
+
+        {# Hover arrow #}
+        <span class="text-cobalt text-sm opacity-0 group-hover:opacity-100 transition-opacity pt-1 shrink-0">→</span>
+      </a>
+    </li>
+    {% endfor %}
+  </ol>
+
+  {% else %}
+  <div class="py-20 text-center">
+    <p class="font-serif text-xl italic text-ink-muted mb-4">"Nothing here yet."</p>
+    <a href="{% url 'generate_image' %}" class="text-xs text-cobalt font-medium tracking-[0.04em] hover:underline">Generate your first image →</a>
+  </div>
+  {% endif %}
+
+</div>
+
+{% endblock %}

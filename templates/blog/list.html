@@ -15,7 +15,7 @@
       {% if featured_post %}
         <a href="{% url 'post_detail' slug=featured_post.slug %}" class="bg-cobalt text-white text-[13px] font-medium px-6 py-2.5 rounded-[2px] tracking-[0.04em] inline-block">Read latest</a>
       {% endif %}
-      <a href="{% url 'post_list' %}" class="text-ink-muted text-[13px] inline-flex items-center gap-1.5">All posts <span class="text-amber">→</span></a>
+      <a href="{% url 'all_posts' %}" class="text-ink-muted text-[13px] inline-flex items-center gap-1.5">All posts <span class="text-amber">→</span></a>
     </div>
   </div>
 
@@ -56,7 +56,7 @@
 <section class="px-10 py-12 border-t border-sand">
   <div class="flex justify-between items-end mb-7">
     <h2 class="font-serif text-2xl font-semibold text-ink">Recent writing</h2>
-    <a href="{% url 'post_list' %}" class="text-xs text-cobalt font-medium tracking-[0.04em]">All posts →</a>
+    <a href="{% url 'all_posts' %}" class="text-xs text-cobalt font-medium tracking-[0.04em]">All posts →</a>
   </div>
   <div class="grid grid-cols-3 gap-5">
     {% for post in posts %}

@@ -15,7 +15,7 @@ services:
     plan: starter
     branch: main
     buildCommand: pip install uv && uv sync --frozen && uv run python manage.py tailwind build && uv run python manage.py collectstatic --no-input && uv run python manage.py migrate
-    startCommand: uv run gunicorn travel_diaries.wsgi:application --bind 0.0.0.0:$PORT --workers 2
+    startCommand: uv run uvicorn travel_diaries.asgi:application --host 0.0.0.0 --port $PORT --workers 2
     envVars:
       - key: DJANGO_SETTINGS_MODULE
         value: travel_diaries.settings.production
@@ -54,7 +54,7 @@ services:
     plan: starter
     branch: staging
     buildCommand: pip install uv && uv sync --frozen && uv run python manage.py tailwind build && uv run python manage.py collectstatic --no-input && uv run python manage.py migrate
-    startCommand: uv run gunicorn travel_diaries.wsgi:application --bind 0.0.0.0:$PORT --workers 2
+    startCommand: uv run uvicorn travel_diaries.asgi:application --host 0.0.0.0 --port $PORT --workers 2
     envVars:
       - key: DJANGO_SETTINGS_MODULE
         value: travel_diaries.settings.production

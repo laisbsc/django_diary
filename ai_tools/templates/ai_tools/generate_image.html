@@ -5,41 +5,85 @@
 {% block content %}
 <div class="max-w-2xl mx-auto px-6 py-16">
 
-  <div class="flex items-baseline justify-between mb-2">
-    <h1 class="font-serif text-3xl text-ink">Image Generator</h1>
-    <a href="{% url 'image_gallery' %}"
-       class="text-xs font-medium text-cobalt border border-cobalt px-4 py-1.5 rounded-[2px] hover:bg-cobalt hover:text-cream transition-colors tracking-[0.04em]">
-      View gallery
-    </a>
+  {# ── Header ── #}
+  <div class="mb-12">
+    <div class="flex items-end justify-between">
+      <div>
+        <p class="text-[10px] font-semibold tracking-[0.14em] uppercase text-cobalt mb-2">AI · Tools</p>
+        <h1 class="font-serif text-3xl font-semibold text-ink">Image Generator</h1>
+      </div>
+      <a href="{% url 'image_gallery' %}"
+         class="text-xs font-medium text-cobalt border border-cobalt px-4 py-1.5 rounded-[2px] hover:bg-cobalt hover:text-cream transition-colors tracking-[0.04em] mb-1">
+        View gallery
+      </a>
+    </div>
+    <div class="flex items-center gap-4 mt-4">
+      <div class="h-px flex-1 bg-sand"></div>
+      <span class="text-[11px] tracking-[0.12em] uppercase text-ink-light font-medium">Describe · Generate · Keep</span>
+      <div class="h-px flex-1 bg-sand"></div>
+    </div>
   </div>
-  <p class="text-sm text-ink-muted mb-10">Describe an object or animal and let the AI add an afro hair to it.</p>
 
-  <form method="post" class="space-y-4">
+  {# ── Form ── #}
+  <form method="post" class="space-y-3">
     {% csrf_token %}
+    <label for="prompt-input"
+           class="block text-xs font-medium tracking-[0.08em] uppercase text-ink-muted mb-2">
+      Your prompt
+    </label>
     <textarea
+      id="prompt-input"
       name="prompt"
       maxlength="500"
-      rows="4"
+      rows="5"
       placeholder="A misty forest at dawn with golden light filtering through the trees…"
-      class="w-full border border-sand rounded-[2px] px-4 py-3 text-sm text-ink bg-cream placeholder-ink-light focus:outline-none focus:border-cobalt resize-none"
+      class="w-full border border-sand rounded-[2px] px-4 py-3 text-sm text-ink bg-cream placeholder-ink-light focus:outline-none focus:border-cobalt resize-none transition-colors"
     >{{ prompt }}</textarea>
+    <div class="flex items-center justify-between">
+      <p class="text-xs text-ink-light italic">Characters described will have a natural afro hairstyle.</p>
+      <span id="char-count" class="text-xs text-ink-light">{% if prompt %}{{ prompt|length }}{% else %}0{% endif %}/500</span>
+    </div>
     <button
       type="submit"
-      class="bg-cobalt text-cream text-xs font-medium tracking-[0.04em] px-6 py-2.5 rounded-[2px] hover:bg-cobalt/90 transition-colors"
+      class="w-full bg-cobalt text-cream text-xs font-medium tracking-[0.04em] px-6 py-3 rounded-[2px] hover:bg-cobalt/90 transition-colors"
     >
-      Generate
+      Generate image
     </button>
   </form>
 
+  {# ── Error ── #}
   {% if error %}
-  <p class="mt-8 text-sm text-sienna">{{ error }}</p>
+  <p class="mt-6 text-sm text-sienna border border-sienna/40 rounded-[2px] px-4 py-3">{{ error }}</p>
   {% endif %}
 
+  {# ── Result ── #}
   {% if image_url %}
-  <div class="mt-10">
-    <img src="{{ image_url }}" alt="Generated image for: {{ prompt }}" class="w-full rounded-[2px] border border-sand">
+  <div class="mt-12">
+    <div class="flex items-center gap-4 mb-6">
+      <div class="h-px flex-1 bg-sand"></div>
+      <span class="text-[11px] tracking-[0.12em] uppercase text-ink-light font-medium">Result</span>
+      <div class="h-px flex-1 bg-sand"></div>
+    </div>
+    <img src="{{ image_url }}"
+         alt="Generated image for: {{ prompt }}"
+         class="w-full rounded-[2px] border border-sand">
+    {% if prompt %}
+    <p class="mt-4 font-serif text-sm italic text-ink-muted">"{{ prompt }}"</p>
+    {% endif %}
   </div>
   {% endif %}
 
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  const textarea = document.getElementById('prompt-input');
+  const counter = document.getElementById('char-count');
+  if (textarea && counter) {
+    textarea.addEventListener('input', () => {
+      counter.textContent = textarea.value.length + '/500';
+    });
+  }
+</script>
 {% endblock %}

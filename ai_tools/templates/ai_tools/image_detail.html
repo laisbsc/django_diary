@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}{{ image.prompt|truncatechars:60 }} · laís.{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto px-6 py-16">
+
+  <a href="{% url 'image_gallery' %}" class="text-xs text-ink-muted hover:text-cobalt transition-colors">← Back to gallery</a>
+
+  <div class="mt-8">
+    <img
+      src="{{ image.image.url }}"
+      alt="{{ image.prompt }}"
+      class="w-full rounded-[2px] border border-sand"
+    >
+  </div>
+
+  <div class="mt-6">
+    <p class="text-sm text-ink">{{ image.prompt }}</p>
+    <p class="mt-1 text-xs text-ink-muted">{{ image.created_at|date:"N j, Y · g:i A" }}</p>
+  </div>
+
+</div>
+{% endblock %}
