@@ -19,6 +19,10 @@ MIDDLEWARE.insert(_security_idx + 1, 'whitenoise.middleware.WhiteNoiseMiddleware
 MEDIA_ROOT = '/var/data/media'
 
 STORAGES = {
+    # Media files → local filesystem (Render persistent disk at /var/data/media)
+    'default': {
+        'BACKEND': 'django.core.files.storage.FileSystemStorage',
+    },
     # Static files → WhiteNoise with Brotli/gzip compression + cache manifests
     'staticfiles': {
         'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
