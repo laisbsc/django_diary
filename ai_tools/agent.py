@@ -36,8 +36,4 @@ async def generate_and_save_image(prompt: str) -> str:
     with logfire.span('save image to storage', storage_path=name, image_bytes=len(image.data)):
         saved = await sync_to_async(default_storage.save)(name, ContentFile(image.data))
 
-    with logfire.span('save image record to db', prompt=prompt, saved_path=saved):
-        from .models import GeneratedImage
-        await sync_to_async(GeneratedImage.objects.create)(prompt=prompt, image=saved)
-
     return saved

@@ -8,11 +8,15 @@
   <a href="{% url 'image_gallery' %}" class="text-xs text-ink-muted hover:text-cobalt transition-colors">← Back to gallery</a>
 
   <div class="mt-8">
+    {% if image.image %}
     <img
       src="{{ image.image.url }}"
       alt="{{ image.prompt }}"
       class="w-full rounded-[2px] border border-sand"
     >
+    {% else %}
+    <p class="text-sm text-ink-muted italic">Image not available (status: {{ image.status }}).</p>
+    {% endif %}
   </div>
 
   <div class="mt-6">
