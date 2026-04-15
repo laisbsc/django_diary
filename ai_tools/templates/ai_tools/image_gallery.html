@@ -33,27 +33,31 @@
   {% if images %}
   <ol>
     {% for img in images %}
-    <li class="group">
-      <a href="{% url 'image_detail' img.pk %}"
-         class="flex gap-6 py-7 border-b border-sand/70 items-start">
+    <li class="group flex gap-6 py-7 border-b border-sand/70 items-start">
 
-        {# Entry number #}
-        <span class="font-serif text-[13px] text-sand group-hover:text-cobalt/40 transition-colors pt-1 w-6 shrink-0 tabular-nums select-none">
-          {{ forloop.counter|stringformat:"02d" }}
-        </span>
+      {# Entry number #}
+      <span class="font-serif text-[13px] text-sand group-hover:text-cobalt/40 transition-colors pt-1 w-6 shrink-0 tabular-nums select-none">
+        {{ forloop.counter|stringformat:"02d" }}
+      </span>
 
-        {# Prompt + date #}
-        <div class="flex-1 min-w-0">
-          <p class="font-serif text-[18px] italic text-ink leading-[1.45] mb-2
-                    group-hover:text-cobalt transition-colors duration-150">
-            "{{ img.prompt }}"
-          </p>
-          <span class="text-[11px] text-ink-light">{{ img.created_at|date:"M j, Y · g:i A" }}</span>
-        </div>
-
-        {# Hover arrow #}
-        <span class="text-cobalt text-sm opacity-0 group-hover:opacity-100 transition-opacity pt-1 shrink-0">→</span>
+      {# Prompt + date #}
+      <a href="{% url 'image_detail' img.pk %}" class="flex-1 min-w-0">
+        <p class="font-serif text-[18px] italic text-ink leading-[1.45] mb-2
+                  group-hover:text-cobalt transition-colors duration-150">
+          "{{ img.prompt }}"
+        </p>
+        <span class="text-[11px] text-ink-light">{{ img.created_at|date:"M j, Y · g:i A" }}</span>
       </a>
+
+      {# Delete #}
+      <form method="post" action="{% url 'image_delete' img.pk %}" class="shrink-0 pt-1">
+        {% csrf_token %}
+        <button type="submit"
+                onclick="return confirm('Delete this image?')"
+                class="text-[11px] text-ink-light hover:text-sienna transition-colors opacity-0 group-hover:opacity-100">
+          delete
+        </button>
+      </form>
     </li>
     {% endfor %}
   </ol>

@@ -19,9 +19,19 @@
     {% endif %}
   </div>
 
-  <div class="mt-6">
-    <p class="text-sm text-ink">{{ image.prompt }}</p>
-    <p class="mt-1 text-xs text-ink-muted">{{ image.created_at|date:"N j, Y · g:i A" }}</p>
+  <div class="mt-6 flex items-start justify-between gap-4">
+    <div>
+      <p class="text-sm text-ink">{{ image.prompt }}</p>
+      <p class="mt-1 text-xs text-ink-muted">{{ image.created_at|date:"N j, Y · g:i A" }}</p>
+    </div>
+    <form method="post" action="{% url 'image_delete' image.pk %}">
+      {% csrf_token %}
+      <button type="submit"
+              onclick="return confirm('Delete this image?')"
+              class="text-xs text-ink-light hover:text-sienna transition-colors shrink-0">
+        Delete
+      </button>
+    </form>
   </div>
 
 </div>
