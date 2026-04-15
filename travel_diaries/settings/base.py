@@ -143,6 +143,10 @@ _DJANGO_Q_TABLES = ('django_q_ormq', 'django_q_task', 'django_q_schedule', 'djan
 
 def _drop_django_q_spans(info) -> float:
     """Drop traces that only contain django-q ORM polling queries."""
+    if info.event == 'start':
+        # db.statement is not set on the span object yet at start time;
+        # return 0.0 to buffer and defer the decision to span end.
+        return 0.0
     stmt = (info.span.attributes or {}).get('db.statement', '')
     if isinstance(stmt, str) and any(t in stmt for t in _DJANGO_Q_TABLES):
         return 0.0
