@@ -138,10 +138,22 @@ Q_CLUSTER = {
 # Logfire — environment is set per-service via the ENVIRONMENT env var
 ENVIRONMENT = os.environ.get('ENVIRONMENT', 'prod')
 
+_DJANGO_Q_TABLES = ('django_q_ormq', 'django_q_task', 'django_q_schedule', 'django_q_failure')
+
+
+def _drop_django_q_spans(info) -> float:
+    """Drop traces that only contain django-q ORM polling queries."""
+    stmt = (info.span.attributes or {}).get('db.statement', '')
+    if isinstance(stmt, str) and any(t in stmt for t in _DJANGO_Q_TABLES):
+        return 0.0
+    return 1.0
+
+
 api_key = os.environ.get('LOGFIRE_TOKEN')
 if api_key:
     logfire.configure(
         token=api_key,
         service_name='django_app',
         environment=ENVIRONMENT,
+        sampling=logfire.SamplingOptions(tail=_drop_django_q_spans),
     )
