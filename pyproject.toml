@@ -19,4 +19,5 @@ dependencies = [
     "django-tailwind>=3.8.0",
     "cookiecutter>=2.7.1",
     "pydantic-ai[openai]>=1.31.0",
+    "django-q2>=1.7.0",
 ]

@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}Generating image… · laís.{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto px-6 py-16">
+
+  <div class="mb-12">
+    <p class="text-[10px] font-semibold tracking-[0.14em] uppercase text-cobalt mb-2">AI · Tools</p>
+    <h1 class="font-serif text-3xl font-semibold text-ink">Image Generator</h1>
+    <div class="flex items-center gap-4 mt-4">
+      <div class="h-px flex-1 bg-sand"></div>
+      <span class="text-[11px] tracking-[0.12em] uppercase text-ink-light font-medium">Generating</span>
+      <div class="h-px flex-1 bg-sand"></div>
+    </div>
+  </div>
+
+  <div id="pending-state">
+    <p class="font-serif text-sm italic text-ink-muted mb-6">"{{ image.prompt }}"</p>
+    <div class="flex items-center gap-3 text-sm text-ink-muted">
+      <svg class="animate-spin h-4 w-4 text-cobalt" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+      </svg>
+      <span>Your image is being generated, this may take up to a minute…</span>
+    </div>
+  </div>
+
+  <div id="error-state" class="hidden">
+    <p class="text-sm text-sienna border border-sienna/40 rounded-[2px] px-4 py-3" id="error-message"></p>
+    <a href="{% url 'generate_image' %}" class="mt-4 inline-block text-xs font-medium text-cobalt border border-cobalt px-4 py-1.5 rounded-[2px] hover:bg-cobalt hover:text-cream transition-colors tracking-[0.04em]">
+      Try again
+    </a>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  const statusUrl = "{% url 'image_status' image.pk %}";
+
+  function poll() {
+    fetch(statusUrl)
+      .then(r => r.json())
+      .then(data => {
+        if (data.status === 'complete') {
+          window.location.href = "{% url 'image_gallery' %}";
+        } else if (data.status === 'failed') {
+          document.getElementById('pending-state').classList.add('hidden');
+          document.getElementById('error-message').textContent = data.error || 'Image generation failed.';
+          document.getElementById('error-state').classList.remove('hidden');
+        } else {
+          setTimeout(poll, 3000);
+        }
+      })
+      .catch(() => setTimeout(poll, 5000));
+  }
+
+  setTimeout(poll, 3000);
+</script>
+{% endblock %}

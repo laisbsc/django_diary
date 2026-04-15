@@ -1,5 +1,3 @@
-import os
-
 from django.apps import AppConfig
 
 
@@ -8,6 +6,4 @@ class AiToolsConfig(AppConfig):
     name = 'ai_tools'
 
     def ready(self):
-        if os.environ.get('LOGFIRE_TOKEN'):
-            import logfire
-            logfire.instrument_django()
+        pass

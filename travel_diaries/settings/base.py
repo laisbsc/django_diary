@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'blog',
     'map',
     'ai_tools',
+    'django_q',
 ]
 
 TAILWIND_APP_NAME = 'theme'
@@ -124,6 +125,14 @@ LOGGING = {
         'handlers': ['logfire', 'console'],
         'level': 'WARNING',
     },
+}
+
+Q_CLUSTER = {
+    'name': 'django_diary',
+    'workers': 1,
+    'timeout': 180,
+    'retry': 240,
+    'orm': 'default',
 }
 
 # Logfire — environment is set per-service via the ENVIRONMENT env var
