@@ -21,3 +21,5 @@ class BlogConfig(AppConfig):
             })
             logfire.instrument_psycopg()
             logfire.instrument_pydantic_ai()
+
+ # More details in logfire docs: https://pydantic.dev/docs/logfire/integrations/web-frameworks/django
