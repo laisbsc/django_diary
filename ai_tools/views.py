@@ -23,8 +23,7 @@ async def image_gallery_view(request):
 @login_required
 async def image_detail_view(request, pk):
     with logfire.span('image detail', pk=pk):
-        with logfire.span('fetch generated image', pk=pk):
-            image = await sync_to_async(get_object_or_404)(GeneratedImage, pk=pk)
+        image = await sync_to_async(get_object_or_404)(GeneratedImage, pk=pk)
     return render(request, 'ai_tools/image_detail.html', {'image': image})
 
 
