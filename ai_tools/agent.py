@@ -10,6 +10,7 @@ _image_agent: Agent | None = None
 
 
 def _get_agent() -> Agent:
+    """Lazy initializer for the Pydantic AI agent with an image generation tool."""
     global _image_agent
     if _image_agent is None:
         _image_agent = Agent(
