@@ -1,13 +1,16 @@
 # laís. — personal blog
 
-A travel and writing blog built with Django, deployed on Render. Posts support Markdown, interactive maps via Folium, and AI-assisted post creation (in progress).
+> This repo is used as a live demo for the DjangoCon EU 2026 talk. Slides: [pitch.com/v/djangocon_eu_26-iy8iir](https://pitch.com/v/djangocon_eu_26-iy8iir)
+
+A travel and writing blog built with Django, deployed on Render. Posts support Markdown, interactive maps via Folium, and AI image generation.
 
 ## Stack
 
 - **Backend:** Django 5.2, Python 3.13
 - **Database:** PostgreSQL (Render) / SQLite (local)
 - **Static files:** WhiteNoise
-- **Media uploads:** Cloudflare R2
+- **Media storage:** Render persistent disk
+- **Task queue:** Django-Q (background image generation)
 - **Maps:** Folium
 - **Observability:** Logfire
 - **Package manager:** uv
@@ -50,8 +53,13 @@ DJANGO_SETTINGS_MODULE=travel_diaries.settings.local uv run python manage.py run
 
 ### AI image generator
 
-Requires `OPENAI_API_KEY` in `.env`. Visit `/ai/generate-image/` while logged in.
-The page will hang for ~10–20 seconds while the image is generated — this is expected.
+Requires `OPENAI_API_KEY` in `.env`. Also run the task worker in a second terminal:
+
+```bash
+DJANGO_SETTINGS_MODULE=travel_diaries.settings.local uv run python manage.py qcluster
+```
+
+Visit `/ai/generate-image/` while logged in. Generation runs in the background — the page polls for completion automatically.
 
 ## Environment variables
 
@@ -71,16 +79,22 @@ Render runs the following on each deploy:
 pip install uv && uv sync --frozen && uv run python manage.py collectstatic --no-input && uv run python manage.py migrate
 ```
 
+Start command (runs web server and task worker in the same service):
+```bash
+bash -c "uv run python manage.py qcluster & uv run gunicorn travel_diaries.wsgi:application --bind 0.0.0.0:$PORT --workers 2"
+```
+
 ## Project structure
 
 ```
 travel_diaries/settings/
     base.py       # shared settings
     local.py      # local dev (SQLite, DEBUG=True)
-    production.py # Render (PostgreSQL, WhiteNoise, R2)
+    production.py # Render (PostgreSQL, WhiteNoise, persistent disk)
 
 blog/             # posts, categories, about page
 map/              # location model + Folium map views
+ai_tools/         # image generation (pydantic-ai, Django-Q, gallery)
 templates/        # project-level templates (base, blog list/detail)
 docs/             # brand.md, seo.md
 ```
